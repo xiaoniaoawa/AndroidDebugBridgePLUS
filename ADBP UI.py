@@ -3,6 +3,7 @@ import os
 import time
 import sys
 import threading
+import webbrowser
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -94,9 +95,34 @@ win.deiconify()
 nb=ttk.Notebook(win)
 
 
-#已连接的设备
+#设备
 pta=tk.Frame(nb)
-nb.add(pta,text='已连接的设备')
+nb.add(pta,text='设备')
+
+connect_pt=ttk.LabelFrame(pta,text='无线ADB')
+
+tk.Label(connect_pt,text='部分设备支持无线ADB\n可以由处在同一局域网下的计算机无线连接').pack(fill=tk.X)
+
+ip_enter=tttk.TipEnter(connect_pt,text='设备IP地址')
+ip_enter.pack(fill=tk.X,padx=15,pady=5)
+
+port_enter=tttk.TipEnter(connect_pt,text='ADB端口')
+port_enter.pack(fill=tk.X,padx=15,pady=5)
+
+ttk.Button(connect_pt,text='无线连接',command=lambda:os.system('adb connect '+ip_enter.get()+':'+port_enter.get())).pack(padx=15,pady=5)
+
+tcpip_pt=ttk.LabelFrame(connect_pt,text='设置无线端口')
+
+tk.Label(tcpip_pt,text='您可以在不支持无线ADB的设备上设置无线端口\n设备重启前可以使用局域网ADB').pack(fill=tk.X)
+
+tcpip_enter=tttk.TipEnter(tcpip_pt,text='无线端口',command=lambda:print('尚未就绪'),btntxt='设置')
+tcpip_enter.command=lambda:os.system('adb tcpip '+tcpip_enter.get())
+tcpip_enter.refresh()
+tcpip_enter.pack(fill=tk.X,padx=15,pady=5)
+
+tcpip_pt.pack(fill=tk.X,padx=5,pady=5)
+
+connect_pt.pack(side=tk.BOTTOM,fill=tk.X,padx=5,pady=5)
 
 device_lst=tk.Label(pta,text='尚未加载', justify="left", anchor="w")
 device_lst.pack(fill=tk.X)
@@ -108,27 +134,30 @@ refresh_devices_t.start()
 ptb=tk.Frame(nb)
 nb.add(ptb,text='应用管理')
 
-package_enter=tttk.TipEnter(ptb,text='应用包名')
-package_enter.pack(fill=tk.X)
-
-ttk.Button(ptb,text='卸载',command=lambda:os.system('adb shell pm uninstall -k --user 0 '+package_enter.get())).pack(fill=tk.X)
-ttk.Button(ptb,text='启动',command=lambda:os.system('adb shell am start ')+package_enter.get()).pack(fill=tk.X)
 tk.Label(ptb,text='').pack()
-ttk.Button(ptb,text='安装APK',command=lambda:os.system('adb install '+filebox.askopenfilename(title='请选择安装包',filetypes=[('安卓安装包','.apk')]))).pack(fill=tk.X)
+
+package_enter=tttk.TipEnter(ptb,text='应用包名')
+package_enter.pack(fill=tk.X,padx=15,pady=5)
+
+tttk.BtnRow(ptb,content={'卸载':lambda:os.system('adb shell pm uninstall -k --user 0 '+package_enter.get()),
+                         '启动':lambda:os.system('adb shell am start '+package_enter.get()),
+                         '在酷安查看':lambda:webbrowser.open("https://www.coolapk.com/apk/"+package_enter.get())}).pack(padx=15,pady=5)
+
+ttk.Button(ptb,text='安装APK',command=lambda:os.system('adb install '+filebox.askopenfilename(title='请选择安装包',filetypes=[('安卓安装包','.apk')]))).pack(pady=5)
 
 
 #电源
 ptc=tk.Frame(nb)
 nb.add(ptc,text='电源')
 
-tk.Label(ptb,text='').pack()
-ttk.Button(ptc,text='关机',command=lambda:os.system('adb shutdown')).pack(pady=15)
+tk.Label(ptc,text='').pack()
+ttk.Button(ptc,text='关机',command=lambda:os.system('adb shell reboot -p')).pack(pady=15)
 
 rbrow=tk.Frame(ptc)
 rbchoose=ttk.Combobox(rbrow,value=['系统','Recovery','Fastboot','BROM'])
 ttk.Button(rbrow,text='重启到',command=lambda:reboot(rbchoose.get())).pack(side=tk.LEFT)
 rbchoose.pack(side=tk.RIGHT,fill=tk.X,expand=True)
-rbrow.pack(fill=tk.X)
+rbrow.pack(fill=tk.X,padx=15)
 
 
 #文件推送
@@ -144,3 +173,5 @@ ttk.Button(ptd,text='推送',command=lambda:os.system('adb push '+filebox.askope
 
 nb.pack(fill=tk.BOTH,expand=True)
 win.mainloop()
+
+#5Zyo5oiR5oSP6K+G5Yiw6Ieq5bex57uI5bCG5aSx5Y675LiA5YiH5pe277yM5rOq5bey5LiN55+l5L2V5pe25ruR5Ye655y86KeS
