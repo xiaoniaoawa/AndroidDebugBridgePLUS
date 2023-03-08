@@ -42,14 +42,22 @@ def show_eula():
     return acc_lst
 
 def refresh_device_lst():
-    global device_lst
+    global device_lst,now_display_txt
     while True:
         result=os.popen('adb devices')
-        res=result.read().replace('List of devices attached','已连接如下设备：')
+        resa=result.read().replace('List of devices attached','已连接如下设备：')
+        result=os.popen('adb shell wm size')
+        resb=result.read().replace('x',' × ')
+        result=os.popen('adb shell wm density')
+        resc=result.read()
+        if resb=='':
+            resb='未连接安卓设备'
+            resc='无法加载'
         #os.system('cls')
         #print('已连接如下设备：')
         #print(res)
-        device_lst['text']=res
+        device_lst['text']=resa
+        now_display_txt['text']=str(resb)+'   DPI '+str(resc)
         time.sleep(0.3)
 
 def reboot(choice):
@@ -142,6 +150,8 @@ package_enter.pack(fill=tk.X,padx=15,pady=5)
 tttk.BtnRow(ptb,content={'卸载':lambda:os.system('adb shell pm uninstall -k --user 0 '+package_enter.get()),
                          '启动':lambda:os.system('adb shell am start '+package_enter.get()),
                          '在酷安查看':lambda:webbrowser.open("https://www.coolapk.com/apk/"+package_enter.get())}).pack(padx=15,pady=5)
+tttk.BtnRow(ptb,content={'禁用':lambda:os.system('adb shell pm disable-user '+package_enter.get()),
+                         '启用':lambda:os.system('adb shell pm enable '+package_enter.get())}).pack(padx=15,pady=5)
 
 ttk.Button(ptb,text='安装APK',command=lambda:os.system('adb install '+filebox.askopenfilename(title='请选择安装包',filetypes=[('安卓安装包','.apk')]))).pack(pady=5)
 
@@ -169,6 +179,22 @@ path_enter.enter.insert(tk.END,'/sdcard')
 path_enter.pack(fill=tk.X)
 
 ttk.Button(ptd,text='推送',command=lambda:os.system('adb push '+filebox.askopenfilename(title='选择要推送的文件')+' '+path_enter.get())).pack(pady=15)
+
+
+#界面调整
+ptd=ttk.Notebook(nb)
+nb.add(ptd,text='界面调整')
+
+
+##显示
+ptda=tk.Frame(nb)
+ptd.add(ptda,text='显示')
+
+
+now_display_pt=ttk.LabelFrame(ptda,text='当前设定')
+now_display_pt.pack(fill=tk.X,padx=5,pady=5)
+now_display_txt=tk.Label(now_display_pt,text='尚未加载')
+now_display_txt.pack(fill=tk.X,padx=15,pady=5)
 
 
 nb.pack(fill=tk.BOTH,expand=True)
