@@ -13,7 +13,6 @@ import tkinter.filedialog as filebox
 
 win=tk.Tk()
 win.title('ADBP UI')
-win.minsize(300,500)
 win.withdraw()
 
 def openADBP():
@@ -98,7 +97,7 @@ else:
 
 # 界面部分
 # 窗口显示
-win.deiconify()
+#win.deiconify()
 #多标签
 nb=ttk.Notebook(win)
 
@@ -182,22 +181,57 @@ ttk.Button(ptd,text='推送',command=lambda:os.system('adb push '+filebox.askope
 
 
 #界面调整
-ptd=ttk.Notebook(nb)
-nb.add(ptd,text='界面调整')
+pte=ttk.Notebook(nb)
+nb.add(pte,text='界面调整')
 
 
 ##显示
-ptda=tk.Frame(nb)
-ptd.add(ptda,text='显示')
+ptea=tk.Frame(nb)
+pte.add(ptea,text='显示')
 
-
-now_display_pt=ttk.LabelFrame(ptda,text='当前设定')
+now_display_pt=ttk.LabelFrame(ptea,text='当前设定')
 now_display_pt.pack(fill=tk.X,padx=5,pady=5)
 now_display_txt=tk.Label(now_display_pt,text='尚未加载')
 now_display_txt.pack(fill=tk.X,padx=15,pady=5)
 
+size_modify_pt=tk.Frame(ptea)
 
+tk.Label(size_modify_pt,text='分辨率 ').pack(side=tk.LEFT)
+size_x_enter=ttk.Entry(size_modify_pt,width=10).pack(side=tk.LEFT)
+tk.Label(size_modify_pt,text='×').pack(side=tk.LEFT)
+size_y_enter=ttk.Entry(size_modify_pt,width=10).pack(side=tk.LEFT)
+ttk.Button(size_modify_pt,text='设定',command=lambda:os.system('adb shell wm size '+size_x_enter.get()+' x '+size_y_enter.get())).pack(side=tk.RIGHT)
+
+size_modify_pt.pack(fill=tk.X,padx=15,pady=5)
+
+dpi_enter=tttk.TipEnter(ptea,text='DPI',command=lambda:print('尚未就绪'),btntxt='设定')
+dpi_enter.command=lambda:os.system('adb shell density '+dpi_enter.get())
+dpi_enter.refresh()
+dpi_enter.pack(fill=tk.X,padx=15,pady=5)
+
+
+##样式
+pteb=tk.Frame(nb)
+pte.add(pteb,text='样式')
+
+tk.Label(pteb,text='还没做好哦！').pack(pady=15)
+tk.Label(pteb,text='完工后，您将可以调整：').pack(pady=5)
+tk.Label(pteb,text='- 字体\n- 壁纸\n- 导航栏、状态栏高度与位置',justify='left').pack()
+tk.Label(pteb,text='以及部分可能制作的功能：').pack(pady=5)
+tk.Label(pteb,text='- 状态栏图标调整',justify='left').pack()
+tk.Label(pteb,text='如果您有好想法，欢迎提issue').pack(pady=15)
+
+
+#放置多标签
 nb.pack(fill=tk.BOTH,expand=True)
+
+#窗口尺寸
+win.deiconify()
+win.update()
+#print(win.winfo_width(),win.winfo_height())
+win.minsize(win.winfo_width(),500)
+
+#窗口主循环
 win.mainloop()
 
 #5Zyo5oiR5oSP6K+G5Yiw6Ieq5bex57uI5bCG5aSx5Y675LiA5YiH5pe277yM5rOq5bey5LiN55+l5L2V5pe25ruR5Ye655y86KeS
