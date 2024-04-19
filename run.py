@@ -16,13 +16,15 @@ def openADBP():
         print('1.1) 源代码相关')
         print('-----请不要倒卖本程序，如有此情况，作者有权提出法律诉讼解决')
         print('-----欢迎为本应用提出iessue，但是作者有权对不限于 无效、刷屏、垃圾广告 进行举报删除')
-        print('-----您可以对本应用进行修改，但是请不要把源代码或者修改后的程序发给他人')
-        print('-----请不要对无关人员发送内部版本的"ADBP"，作者有权追溯发布者与接收人')
+        print('-----您可以对本应用进行修改，但是请不要把源代码或者修改后的程序商用')
+        print('-----请不要对无关人员发送内部版本的本作品，作者有权追溯发布者与接收人')
         print('1.2) 您的隐私：')
-        print('-----作者并不能(也没办法)读取您的信息，您享有您的设备中(除分享本软件)的所有权限')
+        print('-----作者并不能(也没办法)读取您的信息，您享有您的设备中(除分享本软件的内部或保密信息)的所有权限！')
         print('以上为本内部版本的所有eula')
         print('更新于23/02/06 12:20 \n 输入 y 继续')
     else:
+        print('注意：这会杀死所有Python进程，是否继续？')
+        os.system("pause")
         os.system('taskkill /f /t /im python.exe')
 openADBP()
 ooberead = open('firstrun.txt','r')
@@ -38,6 +40,7 @@ if oobe == '0':
         print('3 ==== 打开设置(默认包名)')
         print('4 ==== 重启到')
         print('5 ==== 推送文件')
+        print('f ==== 启动Fastboot脚本')
         adbshell = input()
         if adbshell == '0':
             print('以下为adb输出的设备列表: ')
@@ -77,7 +80,7 @@ if oobe == '0':
             print('这会将文件推送到手机的/sdcard 目录')
             os.system('adb push '+input()+' '+'/sdcard')
 else:
-    print('您需要同意 Google.LLC 的eula才可使用此软件：')
+    print('您需要同意 Google LLC 的eula才可使用此软件：')
     while True:
         print('使用r阅读，i同意，其他退出')
         geulai = input()
