@@ -23,9 +23,10 @@ def openADBP():
         print('以上为本内部版本的所有eula')
         print('更新于23/02/06 12:20 \n 输入 y 继续')
     else:
-        print('注意：这会杀死所有Python进程，是否继续？')
+        print('注意：这会杀死所有adb进程，是否继续？')
         os.system("pause")
-        os.system('taskkill /f /t /im python.exe')
+        os.system('taskkill /f /t /im adb.exe')
+        os.system('taskkill /f /t /im adbd.exe')
 openADBP()
 ooberead = open('firstrun.txt','r')
 oobe = ooberead.read()
@@ -40,6 +41,7 @@ if oobe == '0':
         print('3 ==== 打开设置(默认包名)')
         print('4 ==== 重启到')
         print('5 ==== 推送文件')
+        print('6 ==== 类原生网络修复')
         print('f ==== 启动Fastboot脚本')
         adbshell = input()
         if adbshell == '0':
@@ -79,6 +81,19 @@ if oobe == '0':
         elif adbshell == '5':
             print('这会将文件推送到手机的/sdcard 目录')
             os.system('adb push '+input()+' '+'/sdcard')
+        elif adbshell == '6':
+            print('这会将您的手机默认204服务器改为MIUI服务器（https://connect.rom.miui.com/generate_204），确认吗？')
+            print('input "Y" to continue or other to pause.')
+            if input() == 'Y':
+                os.system('settings delete global captive_portal_mode && settings put global captive_portal_mode 0 && settings delete global captive_portal_https_url && settings delete global captive_portal_http_url')
+                os.system('settings put global captive_portal_https_url https://connect.rom.miui.com/generate_204 && settings put global captive_portal_http_url http://connect.rom.miui.com/generate_204')
+            else:
+                pass
+        
+
+
+
+
 else:
     print('您需要同意 Google LLC 的eula才可使用此软件：')
     while True:
