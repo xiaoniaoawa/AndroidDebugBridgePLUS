@@ -8,3 +8,7 @@ Win10/11：
 地址栏敲
 [python run.py]
 用去罢（
+
+
+This program included ADB Commandline Tools, copyright by the AOSP Project.
+本程序包含ADB命令行工具，AOSP Project 版权所有
